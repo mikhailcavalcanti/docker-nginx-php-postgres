@@ -1,0 +1,30 @@
+version: '3'
+services:
+    web:
+      image: nginx:latest
+      container_name: nginx
+      ports:
+        - "8080:80"
+      volumes:
+        - ./www:/code
+        - ./conf/sites-enabled:/etc/nginx/conf.d
+
+    php:
+      build:
+        context: ./
+        dockerfile: Dockerfile-php
+      container_name: php
+      volumes:
+        - ./www:/code
+
+    database:
+      image: postgres:latest
+      container_name: postgres
+      ports:
+        - "5432:5432"
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=abcd1234
+      #volumes:
+      #  - ./database:/var/lib/postgresql/data
+      #  - ./conf/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
